@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Environment files — NEVER commit real secrets (only .env.example is tracked)
+.env
+.env.local
+.env.*.local
+
+# Python (AI service)
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local Claude Code settings (personal, not project source)
+.claude/settings.local.json

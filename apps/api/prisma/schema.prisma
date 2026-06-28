@@ -1,0 +1,231 @@
+// HomeFixr — Database schema (Prisma + PostgreSQL)
+//
+// This file is the DATA DESIGN only (the ER model). It contains NO business
+// logic. Each `model` becomes a table; each `enum` is a fixed, controlled set
+// of states. Relations express how entities connect.
+//
+// Note: migrations are NOT run in Iteration 0 because we use a placeholder
+// DATABASE_URL. Once real Supabase credentials are added, run:
+//   npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums — controlled vocabularies (prevent invalid values at the DB level)
+// ---------------------------------------------------------------------------
+
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum JobCategory {
+  PLUMBING
+  ELECTRICAL
+  APPLIANCES
+  HANDYMAN
+  CLEANING
+}
+
+enum JobStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DocumentType {
+  ID
+  LICENSE
+}
+
+enum PaymentStatus {
+  HELD
+  RELEASED
+  REFUNDED
+}
+
+enum FraudStatus {
+  OPEN
+  DISMISSED
+  CONFIRMED
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+/// A platform account. One table holds all roles (Customer/Provider/Admin),
+/// distinguished by `role`. Providers additionally have a ProviderProfile.
+model User {
+  id           String   @id @default(cuid())
+  role         Role
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  location     String?
+  avatarUrl    String?
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  providerProfile  ProviderProfile?
+  jobs             Job[]          @relation("CustomerJobs")
+  bids             Bid[]
+  reviewsGiven     Review[]       @relation("ReviewsByCustomer")
+  reviewsReceived  Review[]       @relation("ReviewsForProvider")
+  messagesSent     Message[]      @relation("MessagesSent")
+  messagesReceived Message[]      @relation("MessagesReceived")
+  notifications    Notification[]
+}
+
+/// Extra information specific to a Provider (one-to-one with User).
+model ProviderProfile {
+  id                 String             @id @default(cuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id])
+  bio                String?
+  categories         JobCategory[]
+  hourlyRate         Float?
+  ratingAvg          Float              @default(0)
+  ratingCount        Int                @default(0)
+  verificationStatus VerificationStatus @default(PENDING)
+
+  documents VerificationDocument[]
+}
+
+/// An uploaded identity/license document awaiting (or having) admin review.
+model VerificationDocument {
+  id                String             @id @default(cuid())
+  providerProfileId String
+  providerProfile   ProviderProfile    @relation(fields: [providerProfileId], references: [id])
+  type              DocumentType
+  imageUrl          String
+  status            VerificationStatus @default(PENDING)
+  reviewedByAdminId String?
+  createdAt         DateTime           @default(now())
+}
+
+/// A maintenance job posted by a Customer.
+model Job {
+  id          String      @id @default(cuid())
+  customerId  String
+  customer    User        @relation("CustomerJobs", fields: [customerId], references: [id])
+  category    JobCategory
+  title       String
+  description String
+  location    String
+  photos      String[]
+  budgetHint  Float?
+  status      JobStatus   @default(OPEN)
+  createdAt   DateTime    @default(now())
+
+  bids     Bid[]
+  payment  Payment?
+  review   Review?
+  messages Message[]
+}
+
+/// A Provider's competitive offer on a Job. Total is stored explicitly so the
+/// breakdown (rate x hours + equipment) is transparent and auditable.
+model Bid {
+  id             String    @id @default(cuid())
+  jobId          String
+  job            Job       @relation(fields: [jobId], references: [id])
+  providerId     String
+  provider       User      @relation(fields: [providerId], references: [id])
+  hourlyRate     Float
+  estimatedHours Float
+  equipmentCost  Float     @default(0)
+  totalAmount    Float
+  message        String?
+  status         BidStatus @default(PENDING)
+  createdAt      DateTime  @default(now())
+
+  payment Payment?
+}
+
+/// Escrow payment SIMULATION (no real gateway). Models the Held -> Released
+/// state machine for an accepted bid on a job.
+model Payment {
+  id         String        @id @default(cuid())
+  jobId      String        @unique
+  job        Job           @relation(fields: [jobId], references: [id])
+  bidId      String        @unique
+  bid        Bid           @relation(fields: [bidId], references: [id])
+  amount     Float
+  status     PaymentStatus @default(HELD)
+  heldAt     DateTime      @default(now())
+  releasedAt DateTime?
+}
+
+/// A Customer's rating of a Provider after a completed job (one per job).
+model Review {
+  id         String   @id @default(cuid())
+  jobId      String   @unique
+  job        Job      @relation(fields: [jobId], references: [id])
+  customerId String
+  customer   User     @relation("ReviewsByCustomer", fields: [customerId], references: [id])
+  providerId String
+  provider   User     @relation("ReviewsForProvider", fields: [providerId], references: [id])
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+}
+
+/// A one-to-one chat message tied to a job conversation.
+model Message {
+  id         String    @id @default(cuid())
+  jobId      String
+  job        Job       @relation(fields: [jobId], references: [id])
+  senderId   String
+  sender     User      @relation("MessagesSent", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User      @relation("MessagesReceived", fields: [receiverId], references: [id])
+  body       String
+  createdAt  DateTime  @default(now())
+  readAt     DateTime?
+}
+
+/// An in-app notification for a user (new bid, message, payment, etc.).
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String
+  payload   Json?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+/// A flag raised by the fraud-detection rules for admin review. `targetType`
+/// + `targetId` point to the flagged entity (e.g. a user or a bid).
+model FraudFlag {
+  id         String      @id @default(cuid())
+  targetType String
+  targetId   String
+  reason     String
+  score      Float       @default(0)
+  status     FraudStatus @default(OPEN)
+  createdAt  DateTime    @default(now())
+}

@@ -1,0 +1,10 @@
+{
+  "name": "homefixr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HomeFixr — Connecting Homeowners with Trusted Professionals (BSSE Final Year Project). Repository of three independent services: web, api, ai.",
+  "scripts": {
+    "dev:web": "npm --prefix apps/web run dev",
+    "dev:api": "npm --prefix apps/api run dev"
+  }
+}

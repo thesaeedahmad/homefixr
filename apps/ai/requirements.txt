@@ -1,0 +1,6 @@
+# HomeFixr AI service dependencies (Iteration 0: skeleton only).
+# Machine-learning libraries (scikit-learn, etc.) are added in Iteration 6,
+# when the fair-price model is implemented — we avoid installing unused
+# heavy dependencies now (KISS).
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
