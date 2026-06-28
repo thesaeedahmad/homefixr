@@ -19,6 +19,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { env } from './lib/env';
 import healthRoutes from './routes/health.routes';
+import authRoutes from './routes/auth.routes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 
 export function createApp(): Application {
@@ -29,6 +30,7 @@ export function createApp(): Application {
   app.use(express.json());
 
   app.use('/api/health', healthRoutes);
+  app.use('/api/auth', authRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

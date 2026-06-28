@@ -14,8 +14,9 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] STEP 1 — Requirements analysis ([SRS](docs/01-requirements/SRS.md))
 - [x] STEP 2 — Project plan & architecture
 - [x] STEP 3 — UX research, information architecture, design system, wireframes
-- [x] **Iteration 0 — Foundation scaffold** (this commit)
-- [ ] Iteration 1 — Authentication & RBAC
+- [x] Iteration 0 — Foundation scaffold
+- [x] **Iteration 1 — Authentication & RBAC** (register/login, JWT, bcrypt, RBAC)
+- [ ] Iteration 2 — User Profiles & Settings
 
 ## Architecture (frozen)
 
@@ -72,6 +73,12 @@ uvicorn main:app --reload --port 8000
 Health checks: `GET http://localhost:4000/api/health` and `GET http://localhost:8000/health`.
 
 > Database migrations are run later, once a real Supabase `DATABASE_URL` is added.
+
+## API
+
+REST endpoints are documented in [docs/02-design/api.md](docs/02-design/api.md).
+Iteration 1 adds authentication: `POST /api/auth/register`, `POST /api/auth/login`,
+and `GET /api/auth/me` (JWT-protected). Run API tests with `cd apps/api && npm test`.
 
 ## Documentation
 

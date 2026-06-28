@@ -8,7 +8,8 @@ final report's six chapters.
 
 ## 02 — Design
 - [Software Architecture (frozen)](02-design/architecture.md) — services, layering, data design, technology rationale
-- *(Growing per iteration)* ER diagram, use-case diagrams, sequence/activity diagrams, API docs
+- [API Documentation](02-design/api.md) — REST endpoints (auth so far)
+- *(Growing per iteration)* ER diagram, use-case diagrams, sequence/activity diagrams
 
 ## 03 — HCI
 - [UX Research](03-hci/01-ux-research.md) — stakeholders, personas, empathy maps, user stories, task analysis, journey maps, scenarios, competitive analysis
@@ -17,6 +18,7 @@ final report's six chapters.
 - [Wireframes](03-hci/04-wireframes.md) — low / mid / high fidelity
 
 ## 04 — Testing
+- [Iteration 1 — Authentication & RBAC](04-testing/iteration-1-auth.md) — unit + integration test report
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report
