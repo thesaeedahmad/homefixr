@@ -131,6 +131,29 @@ Cancels an OPEN job (→ CLOSED). **200 OK** → `{ job }`. **Errors:** `403` ·
 
 ---
 
+## Bids / Offers (Iteration 5) — all require `Authorization: Bearer <jwt>`
+
+Bid status: `PENDING → ACCEPTED | REJECTED`. The total is computed by the server
+as `hourlyRate × estimatedHours + equipmentCost` (never trusted from the client).
+
+### POST /api/jobs/:jobId/bids — *Provider only*
+Place a bid on an OPEN job (one per provider per job).
+**Body:** `hourlyRate` (>0), `estimatedHours` (>0), `equipmentCost` (≥0, default 0), `message` (optional).
+**201 Created** → `{ bid }`. **Errors:** `400` · `403` not a provider · `404` job · `409` job not open / already bid.
+
+### GET /api/jobs/:jobId/bids — *Customer only (owner)*
+All bids on the caller's job, cheapest first, with each provider's `isVerified`
+flag and rating. **200 OK** → `{ bids }`. **Errors:** `403` not owner · `404`.
+
+### GET /api/bids/mine — *Provider only*
+**200 OK** → `{ bids }` — the caller's bids (with their job's title + status).
+
+### PATCH /api/bids/:id/accept — *Customer only (owner)*
+Accepts a bid: that bid → ACCEPTED, all others on the job → REJECTED, job →
+IN_PROGRESS (atomic). **200 OK** → `{ bid }`. **Errors:** `403` · `404` · `409` job not open / bid not pending.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

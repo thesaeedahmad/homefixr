@@ -19,8 +19,9 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] Live Supabase PostgreSQL connected + initial migration
 - [x] Iteration 2 — User Profiles & Settings (view/edit profile, change password)
 - [x] Iteration 3 — Identity Verification (Cloudinary doc upload, admin approval queue, trust badge, avatars)
-- [x] **Iteration 4 — Job Posting & Categories** (post/edit/cancel jobs, photos, browse + filter)
-- [ ] Iteration 5 — Bidding / Offers
+- [x] Iteration 4 — Job Posting & Categories (post/edit/cancel jobs, photos, browse + filter)
+- [x] **Iteration 5 — Bidding / Offers** (place/compare/accept bids, transparent totals, auto-reject)
+- [ ] Iteration 6 — AI Fair-Price Recommendation
 
 ## Architecture (frozen)
 

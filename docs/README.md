@@ -22,6 +22,7 @@ final report's six chapters.
 - [Iteration 2 — User Profiles & Settings](04-testing/iteration-2-profiles.md) — live integration test report
 - [Iteration 3 — Identity Verification](04-testing/iteration-3-verification.md) — live test report (Supabase + Cloudinary)
 - [Iteration 4 — Job Posting & Categories](04-testing/iteration-4-jobs.md) — live test report
+- [Iteration 5 — Bidding / Offers](04-testing/iteration-5-bidding.md) — live test report
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report

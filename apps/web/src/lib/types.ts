@@ -16,3 +16,23 @@ export type Job = {
   createdAt: string;
   customer?: { id: string; name: string };
 };
+
+export type BidStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+
+export type Bid = {
+  id: string;
+  hourlyRate: number;
+  estimatedHours: number;
+  equipmentCost: number;
+  totalAmount: number;
+  message: string | null;
+  status: BidStatus;
+  createdAt: string;
+  provider?: {
+    id: string;
+    name: string;
+    isVerified: boolean;
+    providerProfile?: { ratingAvg: number; ratingCount: number } | null;
+  };
+  job?: { id: string; title: string; status: JobStatus };
+};

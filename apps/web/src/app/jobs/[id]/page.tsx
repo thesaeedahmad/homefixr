@@ -1,23 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { BidList } from '@/components/bids/BidList';
+import { BidForm } from '@/components/bids/BidForm';
 import { apiGet, apiPatch } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { categoryLabel } from '@/lib/categories';
 import type { Job, JobStatus } from '@/lib/types';
 
 /*
-  Job detail.
+  Job detail — the hub for the bidding workflow (Iteration 5).
 
   HCI applied:
-   - Status is shown as a badge (visibility of system status).
-   - Owner-only actions (Edit / Cancel) appear only when relevant and only
-     while the job is OPEN (recognition, error prevention).
-   - Cancel asks for confirmation (error prevention / easy reversal).
+   - Status badge always visible (system status).
+   - Owner sees the bid comparison; providers see the bid form. Each role sees
+     exactly what it needs (recognition, minimalist).
+   - Owner-only Edit/Cancel appear only while OPEN; Cancel confirms first.
 */
 const STATUS_TONE: Record<JobStatus, 'neutral' | 'warning' | 'success' | 'danger'> = {
   OPEN: 'neutral',
@@ -26,31 +28,30 @@ const STATUS_TONE: Record<JobStatus, 'neutral' | 'warning' | 'success' | 'danger
   CLOSED: 'danger',
 };
 
+type Me = { id: string; role: 'CUSTOMER' | 'PROVIDER' | 'ADMIN' };
+
 export default function JobDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [job, setJob] = useState<Job | null>(null);
-  const [myId, setMyId] = useState<string | null>(null);
+  const [me, setMe] = useState<Me | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cancelling, setCancelling] = useState(false);
+
+  const loadJob = useCallback(() => {
+    return apiGet<{ job: Job }>(`/jobs/${params.id}`).then((data) => setJob(data.job));
+  }, [params.id]);
 
   useEffect(() => {
     if (!getToken()) {
       router.replace('/login');
       return;
     }
-    Promise.all([
-      apiGet<{ job: Job }>(`/jobs/${params.id}`),
-      apiGet<{ user: { id: string } }>('/users/me'),
-    ])
-      .then(([jobRes, meRes]) => {
-        setJob(jobRes.job);
-        setMyId(meRes.user.id);
-      })
+    Promise.all([loadJob(), apiGet<{ user: Me }>('/users/me').then((d) => setMe(d.user))])
       .catch((err) => setError(err instanceof Error ? err.message : 'Unable to load job'))
       .finally(() => setLoading(false));
-  }, [params.id, router]);
+  }, [loadJob, router]);
 
   async function handleCancel() {
     if (!window.confirm('Cancel this job? This cannot be undone.')) return;
@@ -84,7 +85,7 @@ export default function JobDetailPage() {
     );
   }
 
-  const isOwner = myId !== null && job.customer?.id === myId;
+  const isOwner = me !== null && job.customer?.id === me.id;
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
@@ -119,10 +120,22 @@ export default function JobDetailPage() {
       {isOwner && job.status === 'OPEN' && (
         <div className="mt-8 flex gap-2 border-t border-neutral-200 pt-6">
           <Button href={`/jobs/${job.id}/edit`} variant="secondary">Edit</Button>
-          <Button variant="secondary" loading={cancelling} onClick={handleCancel}>
-            Cancel job
-          </Button>
+          <Button variant="secondary" loading={cancelling} onClick={handleCancel}>Cancel job</Button>
         </div>
+      )}
+
+      {/* Bidding: owner compares bids; provider places a bid. */}
+      {isOwner && me?.role === 'CUSTOMER' && (
+        <section className="mt-10">
+          <h2 className="mb-3 text-lg font-semibold text-neutral-900">Bids</h2>
+          <BidList jobId={job.id} jobStatus={job.status} onChange={loadJob} />
+        </section>
+      )}
+
+      {me?.role === 'PROVIDER' && (
+        <section className="mt-10">
+          <BidForm jobId={job.id} jobStatus={job.status} />
+        </section>
       )}
     </main>
   );
