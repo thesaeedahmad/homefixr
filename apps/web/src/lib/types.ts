@@ -17,6 +17,16 @@ export type Job = {
   customer?: { id: string; name: string };
 };
 
+export type Message = {
+  id: string;
+  jobId: string;
+  senderId: string;
+  receiverId: string;
+  body: string;
+  createdAt: string;
+  readAt: string | null;
+};
+
 export type BidStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
 export type Bid = {

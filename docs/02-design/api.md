@@ -183,6 +183,28 @@ Not called by the browser directly. Body `{ category, complexity (1–5), estima
 
 ---
 
+## Chat (Iteration 7) — requires `Authorization: Bearer <jwt>`
+
+A job conversation has two participants: the customer and the **assigned**
+provider (accepted bid). Chat opens only after a provider is hired.
+
+### GET /api/jobs/:jobId/messages
+**200 OK** → `{ available, otherParty: {id,name}|null, messages: [...] }`.
+`available` is `false` for the customer before anyone is hired.
+**Errors:** `403` not a participant · `404` job.
+
+### POST /api/jobs/:jobId/messages
+Send a message. Persisted, then pushed over Socket.io to the job room.
+**Body:** `{ "body": string (1–1000) }`. **201 Created** → `{ message }`.
+**Errors:** `400` empty · `403` not a participant · `409` no provider hired yet.
+
+### Real-time (Socket.io)
+Connect to the API origin with `auth: { token: <jwt> }`. Then:
+- emit `chat:join` with a `jobId` (server verifies participation before joining the room),
+- listen for `chat:message` events (the saved message object).
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

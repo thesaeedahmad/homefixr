@@ -55,6 +55,14 @@ export const bidRepository = {
     return prisma.bid.findUnique({ where: { id }, include: { job: true } });
   },
 
+  /** The accepted bid on a job (the assigned provider), if any. */
+  findAcceptedByJob(jobId: string) {
+    return prisma.bid.findFirst({
+      where: { jobId, status: 'ACCEPTED' },
+      include: { provider: { select: { id: true, name: true } } },
+    });
+  },
+
   acceptTransaction(bidId: string, jobId: string) {
     return prisma.$transaction(async (tx) => {
       const accepted = await tx.bid.update({

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { BidList } from '@/components/bids/BidList';
 import { BidForm } from '@/components/bids/BidForm';
+import { Chat } from '@/components/chat/Chat';
 import { apiGet, apiPatch } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { categoryLabel } from '@/lib/categories';
@@ -135,6 +136,13 @@ export default function JobDetailPage() {
       {me?.role === 'PROVIDER' && (
         <section className="mt-10">
           <BidForm jobId={job.id} jobStatus={job.status} category={job.category} />
+        </section>
+      )}
+
+      {/* Chat — visible to the customer owner and the assigned provider. */}
+      {me && (isOwner || me.role === 'PROVIDER') && (
+        <section className="mt-10">
+          <Chat jobId={job.id} meId={me.id} />
         </section>
       )}
     </main>

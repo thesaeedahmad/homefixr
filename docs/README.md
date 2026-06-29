@@ -24,6 +24,7 @@ final report's six chapters.
 - [Iteration 4 — Job Posting & Categories](04-testing/iteration-4-jobs.md) — live test report
 - [Iteration 5 — Bidding / Offers](04-testing/iteration-5-bidding.md) — live test report
 - [Iteration 6 — AI Fair-Price Recommendation](04-testing/iteration-6-ai-pricing.md) — model + cross-service test report
+- [Iteration 7 — Chat (Socket.io)](04-testing/iteration-7-chat.md) — real-time + REST gating test report
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report

@@ -25,6 +25,7 @@ import verificationRoutes from './routes/verification.routes';
 import jobRoutes from './routes/job.routes';
 import bidRoutes from './routes/bid.routes';
 import pricingRoutes from './routes/pricing.routes';
+import messageRoutes from './routes/message.routes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 
 export function createApp(): Application {
@@ -41,6 +42,7 @@ export function createApp(): Application {
   app.use('/api/jobs', jobRoutes);
   app.use('/api', bidRoutes);
   app.use('/api/pricing', pricingRoutes);
+  app.use('/api', messageRoutes);
 
   app.use(notFound);
   app.use(errorHandler);
