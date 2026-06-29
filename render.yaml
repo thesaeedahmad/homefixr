@@ -1,0 +1,50 @@
+# Render blueprint for HomeFixr's backend services (api + ai).
+# The web frontend deploys separately to Vercel (apps/web).
+#
+# After creating the services, set the secret env vars (marked sync:false) in the
+# Render dashboard. See docs/05-report/deployment-guide.md for the full walkthrough.
+services:
+  # --- Express REST API + Socket.io ---
+  - type: web
+    name: homefixr-api
+    runtime: node
+    rootDir: apps/api
+    plan: free
+    buildCommand: npm install && npm run build && npm run migrate:deploy
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: DATABASE_URL # Supabase pooled (6543, pgbouncer) — password percent-encoded
+        sync: false
+      - key: DIRECT_URL # Supabase direct (5432) — used by migrations
+        sync: false
+      - key: JWT_SECRET # long random string
+        sync: false
+      - key: WEB_ORIGIN # deployed Vercel web URL, e.g. https://homefixr.vercel.app
+        sync: false
+      - key: AI_SERVICE_URL # deployed AI service URL (the homefixr-ai service below)
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+  # --- Python FastAPI AI microservice ---
+  - type: web
+    name: homefixr-ai
+    runtime: python
+    rootDir: apps/ai
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health

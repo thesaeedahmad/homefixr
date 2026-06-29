@@ -34,8 +34,15 @@ final report's six chapters.
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report
-- [Chapter 5 — Results and Discussion (draft)](05-report/chapter-5-results.md) — functional results, HCI evaluation, comparison
-- *(Assembled continuously)* Chapter drafts 1–6
+- [Chapter 1 — Introduction](05-report/chapter-1-introduction.md)
+- [Chapter 2 — Background Study](05-report/chapter-2-background.md)
+- [Chapter 3 — Requirements & Design](05-report/chapter-3-requirements-design.md)
+- [Chapter 4 — Implementation](05-report/chapter-4-implementation.md)
+- [Chapter 5 — Results and Discussion](05-report/chapter-5-results.md)
+- [Chapter 6 — Conclusion and Future Work](05-report/chapter-6-conclusion.md)
+- [Installation Guide](05-report/installation-guide.md)
+- [Deployment Guide](05-report/deployment-guide.md)
+- [User Manual](05-report/user-manual.md)
 
 ## Report Chapter Mapping
 | Chapter | Source documents |
