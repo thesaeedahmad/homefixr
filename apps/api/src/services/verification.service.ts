@@ -7,6 +7,7 @@
  */
 import { DocumentType, VerificationStatus } from '@prisma/client';
 import { verificationRepository } from '../repositories/verification.repository';
+import { notificationService } from './notification.service';
 import { uploadImage } from '../lib/cloudinary';
 import { AppError } from '../lib/errors';
 
@@ -44,6 +45,11 @@ export const verificationService = {
   async review(providerProfileId: string, status: VerificationStatus, adminId: string) {
     const result = await verificationRepository.review(providerProfileId, status, adminId);
     if (!result) throw new AppError(404, 'Provider profile not found');
+    await notificationService.notify(
+      result.userId,
+      'VERIFICATION',
+      `Your verification was ${status === 'APPROVED' ? 'approved' : 'rejected'}`,
+    );
     return result;
   },
 };

@@ -27,6 +27,7 @@ final report's six chapters.
 - [Iteration 7 — Chat (Socket.io)](04-testing/iteration-7-chat.md) — real-time + REST gating test report
 - [Iteration 8 — Escrow Payment Simulation](04-testing/iteration-8-escrow.md) — state machine test report
 - [Iteration 9 — Reviews & Ratings](04-testing/iteration-9-reviews.md) — review + aggregate test report
+- [Iteration 10 — Notifications](04-testing/iteration-10-notifications.md) — events + gating test report
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report

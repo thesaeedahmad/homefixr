@@ -9,6 +9,7 @@
  */
 import { jobRepository } from '../repositories/job.repository';
 import { bidRepository } from '../repositories/bid.repository';
+import { notificationService } from './notification.service';
 import { AppError } from '../lib/errors';
 import { CreateBidInput } from '../schemas/bid.schema';
 
@@ -26,7 +27,7 @@ export const bidService = {
     }
 
     const totalAmount = input.hourlyRate * input.estimatedHours + input.equipmentCost;
-    return bidRepository.create({
+    const bid = await bidRepository.create({
       jobId,
       providerId,
       hourlyRate: input.hourlyRate,
@@ -35,6 +36,13 @@ export const bidService = {
       totalAmount,
       message: input.message,
     });
+    await notificationService.notify(
+      job.customerId,
+      'BID_RECEIVED',
+      `New bid on "${job.title}"`,
+      jobId,
+    );
+    return bid;
   },
 
   async listBidsForJob(jobId: string, customerId: string) {
@@ -62,6 +70,13 @@ export const bidService = {
     if (bid.status !== 'PENDING') {
       throw new AppError(409, 'This bid can no longer be accepted');
     }
-    return bidRepository.acceptTransaction(bidId, bid.jobId);
+    const accepted = await bidRepository.acceptTransaction(bidId, bid.jobId);
+    await notificationService.notify(
+      bid.providerId,
+      'BID_ACCEPTED',
+      `Your bid was accepted for "${bid.job.title}"`,
+      bid.jobId,
+    );
+    return accepted;
   },
 };

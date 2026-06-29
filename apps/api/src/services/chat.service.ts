@@ -9,6 +9,7 @@ import { AppError } from '../lib/errors';
 import { jobRepository } from '../repositories/job.repository';
 import { bidRepository } from '../repositories/bid.repository';
 import { messageRepository } from '../repositories/message.repository';
+import { notificationService } from './notification.service';
 
 async function getParticipants(jobId: string) {
   const job = await jobRepository.findById(jobId);
@@ -57,11 +58,13 @@ export const chatService = {
 
   async sendMessage(jobId: string, senderId: string, body: string) {
     const ctx = await assertParticipant(jobId, senderId);
-    return messageRepository.create({
+    const message = await messageRepository.create({
       jobId,
       senderId,
       receiverId: ctx.otherId,
       body,
     });
+    await notificationService.notify(ctx.otherId, 'NEW_MESSAGE', 'You have a new message', jobId);
+    return message;
   },
 };

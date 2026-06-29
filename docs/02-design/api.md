@@ -246,6 +246,23 @@ Rate the provider on a COMPLETED job. **Body:** `{ rating: 1–5, comment?: stri
 
 ---
 
+## Notifications (Iteration 10) — requires `Authorization`
+
+Notifications are created automatically by other services on key events:
+`BID_RECEIVED`, `BID_ACCEPTED`, `PAYMENT_FUNDED`, `PAYMENT_RELEASED`,
+`NEW_MESSAGE`, `VERIFICATION`. Each has `payload: { message, jobId|null }`.
+
+### GET /api/notifications
+**200 OK** → `{ notifications: [...] (latest 50), unreadCount }`.
+
+### PATCH /api/notifications/read-all
+Marks all the caller's notifications read. **200** → `{ ok: true }`.
+
+### PATCH /api/notifications/:id/read
+Marks one read (only if it belongs to the caller). **200** → `{ ok: true }`.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

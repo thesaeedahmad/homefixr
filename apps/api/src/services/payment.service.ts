@@ -13,6 +13,7 @@
 import { jobRepository } from '../repositories/job.repository';
 import { bidRepository } from '../repositories/bid.repository';
 import { paymentRepository } from '../repositories/payment.repository';
+import { notificationService } from './notification.service';
 import { AppError } from '../lib/errors';
 
 async function loadContext(jobId: string) {
@@ -42,7 +43,18 @@ export const paymentService = {
     if (!accepted) throw new AppError(409, 'No accepted bid for this job');
     const existing = await paymentRepository.findByJob(jobId);
     if (existing) throw new AppError(409, 'Payment already exists for this job');
-    return paymentRepository.create({ jobId, bidId: accepted.id, amount: accepted.totalAmount });
+    const payment = await paymentRepository.create({
+      jobId,
+      bidId: accepted.id,
+      amount: accepted.totalAmount,
+    });
+    await notificationService.notify(
+      accepted.providerId,
+      'PAYMENT_FUNDED',
+      `The customer funded "${job.title}" — you can start the work`,
+      jobId,
+    );
+    return payment;
   },
 
   async markWorkDone(jobId: string, providerId: string) {
@@ -58,7 +70,7 @@ export const paymentService = {
   },
 
   async release(jobId: string, customerId: string) {
-    const { job } = await loadContext(jobId);
+    const { job, accepted } = await loadContext(jobId);
     if (job.customerId !== customerId) throw new AppError(403, 'Only the job owner can release payment');
     const payment = await paymentRepository.findByJob(jobId);
     if (!payment) throw new AppError(409, 'No payment to release');
@@ -66,7 +78,16 @@ export const paymentService = {
     if (!payment.workMarkedDoneAt) {
       throw new AppError(409, 'The provider has not marked the work as done yet');
     }
-    return paymentRepository.release(payment.id, jobId);
+    const released = await paymentRepository.release(payment.id, jobId);
+    if (accepted) {
+      await notificationService.notify(
+        accepted.providerId,
+        'PAYMENT_RELEASED',
+        `Payment released for "${job.title}"`,
+        jobId,
+      );
+    }
+    return released;
   },
 
   async dispute(jobId: string, customerId: string) {
