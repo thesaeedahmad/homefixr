@@ -45,3 +45,15 @@ export function apiGet<T>(path: string): Promise<T> {
     headers: { ...authHeaders() },
   }).then(handle<T>);
 }
+
+/**
+ * Multipart upload (files). We intentionally do NOT set Content-Type so the
+ * browser adds the correct multipart boundary automatically.
+ */
+export function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  return fetch(`${API_URL}${path}`, {
+    method: 'POST',
+    headers: { ...authHeaders() },
+    body: formData,
+  }).then(handle<T>);
+}

@@ -20,6 +20,7 @@ final report's six chapters.
 ## 04 — Testing
 - [Iteration 1 — Authentication & RBAC](04-testing/iteration-1-auth.md) — unit + integration test report
 - [Iteration 2 — User Profiles & Settings](04-testing/iteration-2-profiles.md) — live integration test report
+- [Iteration 3 — Identity Verification](04-testing/iteration-3-verification.md) — live test report (Supabase + Cloudinary)
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report

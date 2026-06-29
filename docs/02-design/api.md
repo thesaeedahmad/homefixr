@@ -75,6 +75,31 @@ Change the password (requires the correct current password).
 **200 OK** → `{ "success": true }`
 **Errors:** `400` validation · `401` no token **or** current password incorrect
 
+### POST /api/users/me/avatar
+Upload a profile image (multipart). **Field:** `avatar` (image, ≤ 5 MB).
+**200 OK** → updated `{ user }` with `avatarUrl`. **Errors:** `400` no/invalid file · `401`.
+
+---
+
+## Identity Verification (Iteration 3)
+
+### POST /api/verification — *Provider only*
+Upload ID + license images (multipart). **Fields:** `idDocument`, `licenseDocument`
+(images, ≤ 5 MB each). Stores them in Cloudinary, sets status `PENDING`.
+**201 Created** → `{ verification }`. **Errors:** `400` missing files · `401` · `403` not a provider.
+
+### GET /api/verification/me — *Provider only*
+**200 OK** → `{ verification }` (or `null` if never submitted), including `verificationStatus` and `documents`.
+
+### GET /api/verification/pending — *Admin only*
+**200 OK** → `{ pending: [ { id, user, documents, verificationStatus } ] }`.
+**Errors:** `403` if not an admin.
+
+### PATCH /api/verification/:id/review — *Admin only*
+`:id` = provider profile id. **Body:** `{ "status": "APPROVED" | "REJECTED" }`.
+Updates the profile, stamps the documents, and syncs the provider's `isVerified`.
+**200 OK** → `{ verification }`. **Errors:** `400` · `403` · `404`.
+
 ---
 
 ## Health

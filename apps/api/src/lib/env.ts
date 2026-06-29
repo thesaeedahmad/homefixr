@@ -18,4 +18,18 @@ export const env = {
   // production must set a strong JWT_SECRET in the environment.
   jwtSecret: process.env.JWT_SECRET ?? 'dev-insecure-secret-change-me',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
+
+  // Cloudinary media storage (Iteration 3). Values come from .env only.
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? '',
+    apiKey: process.env.CLOUDINARY_API_KEY ?? '',
+    apiSecret: process.env.CLOUDINARY_API_SECRET ?? '',
+  },
+
+  // Admin seed account (used by the seed script only).
+  admin: {
+    email: process.env.ADMIN_EMAIL ?? 'admin@homefixr.local',
+    password: process.env.ADMIN_PASSWORD ?? 'admin12345',
+    name: process.env.ADMIN_NAME ?? 'HomeFixr Admin',
+  },
 };

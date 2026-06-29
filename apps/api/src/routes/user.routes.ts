@@ -12,6 +12,7 @@ import { userController } from '../controllers/user.controller';
 import { authenticate } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { asyncHandler } from '../lib/asyncHandler';
+import { upload } from '../middleware/upload';
 import { updateProfileSchema, changePasswordSchema } from '../schemas/user.schema';
 
 const router = Router();
@@ -23,6 +24,12 @@ router.patch(
   authenticate,
   validate(changePasswordSchema),
   asyncHandler(userController.changePassword),
+);
+router.post(
+  '/me/avatar',
+  authenticate,
+  upload.single('avatar'),
+  asyncHandler(userController.uploadAvatar),
 );
 
 export default router;

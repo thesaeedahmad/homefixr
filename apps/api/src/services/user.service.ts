@@ -8,6 +8,7 @@
 import { User } from '@prisma/client';
 import { userRepository } from '../repositories/user.repository';
 import { hashPassword, verifyPassword } from '../lib/password';
+import { uploadImage } from '../lib/cloudinary';
 import { AppError } from '../lib/errors';
 import { UpdateProfileInput, ChangePasswordInput } from '../schemas/user.schema';
 
@@ -34,6 +35,12 @@ export const userService = {
 
   async updateProfile(userId: string, input: UpdateProfileInput) {
     const updated = await userRepository.update(userId, input);
+    return toPublicProfile(updated);
+  },
+
+  async updateAvatar(userId: string, buffer: Buffer) {
+    const { url } = await uploadImage(buffer, 'homefixr/avatars');
+    const updated = await userRepository.update(userId, { avatarUrl: url });
     return toPublicProfile(updated);
   },
 

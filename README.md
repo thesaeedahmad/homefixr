@@ -17,8 +17,9 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] Iteration 0 — Foundation scaffold
 - [x] Iteration 1 — Authentication & RBAC (register/login, JWT, bcrypt, RBAC)
 - [x] Live Supabase PostgreSQL connected + initial migration
-- [x] **Iteration 2 — User Profiles & Settings** (view/edit profile, change password)
-- [ ] Iteration 3 — Identity Verification (+ Cloudinary)
+- [x] Iteration 2 — User Profiles & Settings (view/edit profile, change password)
+- [x] **Iteration 3 — Identity Verification** (Cloudinary doc upload, admin approval queue, trust badge, avatars)
+- [ ] Iteration 4 — Job Posting & Categories
 
 ## Architecture (frozen)
 
@@ -57,6 +58,7 @@ cd apps/api
 cp .env.example .env
 npm install
 npm run prisma:generate     # generates the typed Prisma client from the schema
+npm run seed                # creates the admin account (credentials from .env)
 npm run dev
 
 # Web (http://localhost:3000)
