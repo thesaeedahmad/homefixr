@@ -9,7 +9,8 @@ fraud detection, identity verification) and an **escrow payment simulation**.
 
 ## Status
 
-Design phase complete; implementation underway (Scrum, one module per iteration).
+All proposal features implemented and live-tested (Scrum, one module per iteration).
+Remaining: deployment + final report assembly. Optional Phase 2 (DeepFace face match) deferred.
 
 - [x] STEP 1 — Requirements analysis ([SRS](docs/01-requirements/SRS.md))
 - [x] STEP 2 — Project plan & architecture
