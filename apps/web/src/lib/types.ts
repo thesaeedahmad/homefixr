@@ -17,6 +17,14 @@ export type Job = {
   customer?: { id: string; name: string };
 };
 
+export type Review = {
+  id: string;
+  jobId: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+};
+
 export type PaymentStatus = 'HELD' | 'RELEASED' | 'REFUNDED';
 
 export type Payment = {

@@ -9,6 +9,7 @@ import { BidList } from '@/components/bids/BidList';
 import { BidForm } from '@/components/bids/BidForm';
 import { Chat } from '@/components/chat/Chat';
 import { PaymentPanel } from '@/components/payment/PaymentPanel';
+import { ReviewSection } from '@/components/reviews/ReviewSection';
 import { apiGet, apiPatch } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { categoryLabel } from '@/lib/categories';
@@ -150,6 +151,13 @@ export default function JobDetailPage() {
             role={me.role}
             onChange={loadJob}
           />
+        </section>
+      )}
+
+      {/* Review — appears after completion; only the owner can submit. */}
+      {me && (isOwner || me.role === 'PROVIDER') && (
+        <section className="mt-10">
+          <ReviewSection jobId={job.id} jobStatus={job.status} isOwner={isOwner} />
         </section>
       )}
 

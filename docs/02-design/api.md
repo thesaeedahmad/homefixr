@@ -229,6 +229,23 @@ Minimal withhold path → REFUNDED, job CLOSED. **409** if not HELD.
 
 ---
 
+## Reviews & Ratings (Iteration 9) — requires `Authorization`
+
+### POST /api/jobs/:jobId/review — *Customer (owner)*
+Rate the provider on a COMPLETED job. **Body:** `{ rating: 1–5, comment?: string }`.
+**201** → `{ review }`. Recomputes the provider's `ratingAvg`/`ratingCount`.
+**Errors:** `400` rating · `403` not owner · `409` not completed / already reviewed.
+
+### GET /api/jobs/:jobId/review
+**200 OK** → `{ review: {...} | null }`.
+
+### GET /api/providers/:providerId/reviews
+**200 OK** → `{ reviews: [ { rating, comment, customer: { name } } ] }`.
+
+> The aggregate rating appears on the provider's bids (trust signal, FR-25).
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

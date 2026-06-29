@@ -27,6 +27,7 @@ import bidRoutes from './routes/bid.routes';
 import pricingRoutes from './routes/pricing.routes';
 import messageRoutes from './routes/message.routes';
 import paymentRoutes from './routes/payment.routes';
+import reviewRoutes from './routes/review.routes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 
 export function createApp(): Application {
@@ -45,6 +46,7 @@ export function createApp(): Application {
   app.use('/api/pricing', pricingRoutes);
   app.use('/api', messageRoutes);
   app.use('/api', paymentRoutes);
+  app.use('/api', reviewRoutes);
 
   app.use(notFound);
   app.use(errorHandler);
