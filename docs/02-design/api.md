@@ -205,6 +205,30 @@ Connect to the API origin with `auth: { token: <jwt> }`. Then:
 
 ---
 
+## Escrow Payment (Iteration 8) — simulation, no real money
+
+State machine: `pay → HELD`, `provider marks done`, `customer releases → RELEASED` (job COMPLETED),
+or `customer disputes → REFUNDED` (job CLOSED). All require `Authorization`.
+
+### GET /api/jobs/:jobId/payment
+Participants (customer owner or assigned provider) view the payment.
+**200 OK** → `{ payment: {...} | null }`. **403** if not a participant.
+
+### POST /api/jobs/:jobId/payment — *Customer (owner)*
+Fund escrow (amount = accepted bid total). Requires job `IN_PROGRESS` + accepted bid.
+**201** → `{ payment }` (status HELD). **409** if not IN_PROGRESS / already paid.
+
+### PATCH /api/jobs/:jobId/payment/work-done — *Assigned provider*
+Marks the work complete. **200** → `{ payment }`. **409** if not funded / already marked.
+
+### PATCH /api/jobs/:jobId/payment/release — *Customer (owner)*
+Releases held funds → RELEASED, job COMPLETED. **409** if not HELD or provider hasn't marked done.
+
+### PATCH /api/jobs/:jobId/payment/dispute — *Customer (owner)*
+Minimal withhold path → REFUNDED, job CLOSED. **409** if not HELD.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

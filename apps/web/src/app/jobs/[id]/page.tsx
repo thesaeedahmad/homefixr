@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/Badge';
 import { BidList } from '@/components/bids/BidList';
 import { BidForm } from '@/components/bids/BidForm';
 import { Chat } from '@/components/chat/Chat';
+import { PaymentPanel } from '@/components/payment/PaymentPanel';
 import { apiGet, apiPatch } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { categoryLabel } from '@/lib/categories';
@@ -136,6 +137,19 @@ export default function JobDetailPage() {
       {me?.role === 'PROVIDER' && (
         <section className="mt-10">
           <BidForm jobId={job.id} jobStatus={job.status} category={job.category} />
+        </section>
+      )}
+
+      {/* Escrow payment — participants only; self-hides while the job is OPEN. */}
+      {me && (isOwner || me.role === 'PROVIDER') && (
+        <section className="mt-10">
+          <PaymentPanel
+            jobId={job.id}
+            jobStatus={job.status}
+            isOwner={isOwner}
+            role={me.role}
+            onChange={loadJob}
+          />
         </section>
       )}
 

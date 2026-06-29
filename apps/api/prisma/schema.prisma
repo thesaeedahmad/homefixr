@@ -172,15 +172,16 @@ model Bid {
 /// Escrow payment SIMULATION (no real gateway). Models the Held -> Released
 /// state machine for an accepted bid on a job.
 model Payment {
-  id         String        @id @default(cuid())
-  jobId      String        @unique
-  job        Job           @relation(fields: [jobId], references: [id])
-  bidId      String        @unique
-  bid        Bid           @relation(fields: [bidId], references: [id])
-  amount     Float
-  status     PaymentStatus @default(HELD)
-  heldAt     DateTime      @default(now())
-  releasedAt DateTime?
+  id               String        @id @default(cuid())
+  jobId            String        @unique
+  job              Job           @relation(fields: [jobId], references: [id])
+  bidId            String        @unique
+  bid              Bid           @relation(fields: [bidId], references: [id])
+  amount           Float
+  status           PaymentStatus @default(HELD)
+  heldAt           DateTime      @default(now())
+  workMarkedDoneAt DateTime? // set when the provider marks the work complete
+  releasedAt       DateTime?
 }
 
 /// A Customer's rating of a Provider after a completed job (one per job).

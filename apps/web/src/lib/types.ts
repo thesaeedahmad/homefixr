@@ -17,6 +17,19 @@ export type Job = {
   customer?: { id: string; name: string };
 };
 
+export type PaymentStatus = 'HELD' | 'RELEASED' | 'REFUNDED';
+
+export type Payment = {
+  id: string;
+  jobId: string;
+  bidId: string;
+  amount: number;
+  status: PaymentStatus;
+  workMarkedDoneAt: string | null;
+  heldAt: string;
+  releasedAt: string | null;
+};
+
 export type Message = {
   id: string;
   jobId: string;
