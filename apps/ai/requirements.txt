@@ -1,6 +1,8 @@
-# HomeFixr AI service dependencies (Iteration 0: skeleton only).
-# Machine-learning libraries (scikit-learn, etc.) are added in Iteration 6,
-# when the fair-price model is implemented — we avoid installing unused
-# heavy dependencies now (KISS).
-fastapi==0.111.0
-uvicorn[standard]==0.30.1
+# HomeFixr AI service dependencies.
+# Lightweight and free: FastAPI for the web layer, scikit-learn + numpy for the
+# fair-price regression model (Iteration 6).
+# Versions chosen for Python 3.14 wheel compatibility.
+fastapi==0.138.1
+uvicorn[standard]==0.49.0
+scikit-learn==1.9.0
+numpy==2.5.0

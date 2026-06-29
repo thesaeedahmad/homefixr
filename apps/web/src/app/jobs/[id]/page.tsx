@@ -134,7 +134,7 @@ export default function JobDetailPage() {
 
       {me?.role === 'PROVIDER' && (
         <section className="mt-10">
-          <BidForm jobId={job.id} jobStatus={job.status} />
+          <BidForm jobId={job.id} jobStatus={job.status} category={job.category} />
         </section>
       )}
     </main>

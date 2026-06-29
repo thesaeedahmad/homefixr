@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
+import { PriceHint } from '@/components/pricing/PriceHint';
 import { apiUpload } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { JOB_CATEGORIES } from '@/lib/categories';
@@ -23,6 +24,7 @@ export default function NewJobPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState<string>(JOB_CATEGORIES[0].value);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -58,6 +60,8 @@ export default function NewJobPage() {
             id="category"
             name="category"
             required
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             className="rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-primary-600"
           >
             {JOB_CATEGORIES.map((c) => (
@@ -67,6 +71,8 @@ export default function NewJobPage() {
             ))}
           </select>
         </div>
+
+        <PriceHint category={category} />
 
         <Input label="Title" name="title" placeholder="e.g. Leaking kitchen tap" required />
         <Textarea

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { PriceHint } from '@/components/pricing/PriceHint';
 import { apiGet, apiPost } from '@/lib/api';
 import type { Bid, BidStatus } from '@/lib/types';
 
@@ -23,7 +24,15 @@ const STATUS_TONE: Record<BidStatus, 'warning' | 'success' | 'danger'> = {
   REJECTED: 'danger',
 };
 
-export function BidForm({ jobId, jobStatus }: { jobId: string; jobStatus: string }) {
+export function BidForm({
+  jobId,
+  jobStatus,
+  category,
+}: {
+  jobId: string;
+  jobStatus: string;
+  category?: string;
+}) {
   const [myBid, setMyBid] = useState<Bid | null>(null);
   const [loading, setLoading] = useState(true);
   const [rate, setRate] = useState('');
@@ -84,6 +93,7 @@ export function BidForm({ jobId, jobStatus }: { jobId: string; jobStatus: string
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-5">
       <h2 className="text-lg font-semibold text-neutral-900">Place a bid</h2>
+      <PriceHint category={category} estimatedHours={Number(hours) || undefined} />
       <Input
         label="Hourly rate (PKR)"
         name="hourlyRate"

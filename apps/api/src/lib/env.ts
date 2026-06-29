@@ -32,4 +32,7 @@ export const env = {
     password: process.env.ADMIN_PASSWORD ?? 'admin12345',
     name: process.env.ADMIN_NAME ?? 'HomeFixr Admin',
   },
+
+  // AI microservice (Iteration 6). The API calls it for price recommendations.
+  aiServiceUrl: process.env.AI_SERVICE_URL ?? 'http://localhost:8000',
 };

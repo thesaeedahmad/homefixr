@@ -154,6 +154,35 @@ IN_PROGRESS (atomic). **200 OK** → `{ bid }`. **Errors:** `403` · `404` · `4
 
 ---
 
+## AI Fair-Price (Iteration 6) — requires `Authorization: Bearer <jwt>`
+
+### POST /api/pricing
+Returns a fair-price recommendation. The API forwards the request to the Python
+AI service; if that service is unavailable, `recommendation` is `null` (the UI
+then hides the hint — the feature is advisory).
+
+**Body:** `category` (one of the 5), `description` (optional — refines complexity),
+`estimatedHours` (optional number).
+
+**200 OK**
+```json
+{
+  "recommendation": {
+    "category": "PLUMBING",
+    "hourlyRate": { "min": 680, "typical": 800, "max": 920 },
+    "total": { "min": 1360, "typical": 1600, "max": 1840 }
+  }
+}
+```
+`total` is `null` when `estimatedHours` is not provided. `recommendation` is
+`null` if the AI service cannot be reached.
+
+### AI service (internal) — `POST {AI_SERVICE_URL}/predict-price`
+Not called by the browser directly. Body `{ category, complexity (1–5), estimatedHours? }`
+→ `{ category, hourlyRate: {min,typical,max}, total: {…}|null }`.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`
