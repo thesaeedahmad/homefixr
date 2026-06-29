@@ -48,7 +48,8 @@ export function NavBar() {
   return (
     <header className="border-b border-neutral-200 bg-white">
       <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-6 py-3 text-sm">
-        <Link href="/jobs" className="font-semibold text-primary-700">HomeFixr</Link>
+        <Link href="/dashboard" className="font-semibold text-primary-700">HomeFixr</Link>
+        <Link href="/dashboard" className={link}>Dashboard</Link>
         <Link href="/jobs" className={link}>Browse</Link>
         {me.role === 'CUSTOMER' && (
           <>

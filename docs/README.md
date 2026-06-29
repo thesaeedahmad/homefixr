@@ -16,6 +16,8 @@ final report's six chapters.
 - [Information Architecture](03-hci/02-information-architecture.md) — site map, navigation, task/user flows, screen hierarchy
 - [Design System](03-hci/03-design-system.md) — color, typography, spacing, components, accessibility, heuristic coverage
 - [Wireframes](03-hci/04-wireframes.md) — low / mid / high fidelity
+- [Heuristic Evaluation](03-hci/05-heuristic-evaluation.md) — Nielsen's 10 heuristics, severity-rated
+- [Usability Evaluation & SUS](03-hci/06-usability-evaluation.md) — test plan, SUS instrument, Google Forms, results templates
 
 ## 04 — Testing
 - [Iteration 1 — Authentication & RBAC](04-testing/iteration-1-auth.md) — unit + integration test report
@@ -32,6 +34,7 @@ final report's six chapters.
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report
+- [Chapter 5 — Results and Discussion (draft)](05-report/chapter-5-results.md) — functional results, HCI evaluation, comparison
 - *(Assembled continuously)* Chapter drafts 1–6
 
 ## Report Chapter Mapping

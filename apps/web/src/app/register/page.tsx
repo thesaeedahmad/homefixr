@@ -46,7 +46,7 @@ export default function RegisterPage() {
         role,
       });
       saveToken(token);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {

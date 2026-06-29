@@ -36,7 +36,7 @@ export default function LoginPage() {
         password: form.get('password'),
       });
       saveToken(token);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
