@@ -20,4 +20,15 @@ export const userRepository = {
   create(data: { name: string; email: string; passwordHash: string; role: Role }) {
     return prisma.user.create({ data });
   },
+
+  update(
+    id: string,
+    data: { name?: string; phone?: string; location?: string; avatarUrl?: string },
+  ) {
+    return prisma.user.update({ where: { id }, data });
+  },
+
+  updatePassword(id: string, passwordHash: string) {
+    return prisma.user.update({ where: { id }, data: { passwordHash } });
+  },
 };

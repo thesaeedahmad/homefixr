@@ -24,6 +24,7 @@ interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  onClick?: () => void;
 }
 
 const base =
@@ -43,6 +44,7 @@ export function Button({
   loading = false,
   disabled = false,
   fullWidth = false,
+  onClick,
 }: ButtonProps) {
   const className = `${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''}`;
 
@@ -55,7 +57,12 @@ export function Button({
   }
 
   return (
-    <button type={type} className={className} disabled={disabled || loading}>
+    <button
+      type={type}
+      className={className}
+      disabled={disabled || loading}
+      onClick={onClick}
+    >
       {loading ? 'Please wait…' : children}
     </button>
   );

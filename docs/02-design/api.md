@@ -54,6 +54,29 @@ Return the currently authenticated user.
 
 ---
 
+## Profile & Settings (Iteration 2) — all require `Authorization: Bearer <jwt>`
+
+### GET /api/users/me
+Return the current user's full profile.
+**200 OK** → `{ "user": { id, name, email, role, phone, location, avatarUrl, isVerified } }`
+**401** if no/invalid token.
+
+### PATCH /api/users/me
+Update one or more profile fields. Partial update — send only changed fields.
+
+**Body (all optional, ≥ 1 required):** `name`, `phone`, `location`, `avatarUrl` (valid URL)
+**200 OK** → updated `{ user }`
+**Errors:** `400` validation (incl. empty body) · `401` no token
+
+### PATCH /api/users/me/password
+Change the password (requires the correct current password).
+
+**Body:** `{ "currentPassword": string, "newPassword": string (≥ 8) }`
+**200 OK** → `{ "success": true }`
+**Errors:** `400` validation · `401` no token **or** current password incorrect
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

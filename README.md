@@ -15,8 +15,10 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] STEP 2 — Project plan & architecture
 - [x] STEP 3 — UX research, information architecture, design system, wireframes
 - [x] Iteration 0 — Foundation scaffold
-- [x] **Iteration 1 — Authentication & RBAC** (register/login, JWT, bcrypt, RBAC)
-- [ ] Iteration 2 — User Profiles & Settings
+- [x] Iteration 1 — Authentication & RBAC (register/login, JWT, bcrypt, RBAC)
+- [x] Live Supabase PostgreSQL connected + initial migration
+- [x] **Iteration 2 — User Profiles & Settings** (view/edit profile, change password)
+- [ ] Iteration 3 — Identity Verification (+ Cloudinary)
 
 ## Architecture (frozen)
 
