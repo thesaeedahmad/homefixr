@@ -263,6 +263,29 @@ Marks one read (only if it belongs to the caller). **200** → `{ ok: true }`.
 
 ---
 
+## Admin & Fraud (Iteration 11) — ADMIN role only
+
+Fraud flags are created automatically by rule-based checks: a low-ball bid
+(very low hourly rate or total far below the budget) flags the `BID`; a new
+account whose name matches an existing user flags the `USER`.
+
+### GET /api/admin/overview
+**200 OK** → `{ users, jobs:{open,inProgress,completed}, pendingVerifications, openFraud }`.
+
+### GET /api/admin/users · GET /api/admin/jobs
+**200 OK** → `{ users }` / `{ jobs }` (latest 100).
+
+### GET /api/admin/fraud-flags?status=OPEN
+**200 OK** → `{ flags: [ { targetType, targetId, reason, score, status } ] }`.
+
+### PATCH /api/admin/fraud-flags/:id
+Body `{ status: 'CONFIRMED' | 'DISMISSED' }`. **200** → `{ flag }`.
+
+> All `/api/admin/*` routes require the ADMIN role (403 otherwise). The
+> verification queue (`/api/verification/pending`, Iteration 3) is also admin-only.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

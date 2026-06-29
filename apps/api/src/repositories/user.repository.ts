@@ -17,6 +17,14 @@ export const userRepository = {
     return prisma.user.findUnique({ where: { id } });
   },
 
+  /** Users whose name matches (case-insensitive) — used by fraud detection. */
+  findByName(name: string) {
+    return prisma.user.findMany({
+      where: { name: { equals: name, mode: 'insensitive' } },
+      select: { id: true },
+    });
+  },
+
   create(data: { name: string; email: string; passwordHash: string; role: Role }) {
     return prisma.user.create({ data });
   },

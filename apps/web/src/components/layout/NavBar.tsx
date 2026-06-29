@@ -62,7 +62,7 @@ export function NavBar() {
             <Link href="/verification" className={link}>Verification</Link>
           </>
         )}
-        {me.role === 'ADMIN' && <Link href="/admin/verification" className={link}>Admin</Link>}
+        {me.role === 'ADMIN' && <Link href="/admin" className={link}>Admin</Link>}
 
         <div className="ml-auto flex items-center gap-4">
           <Link href="/notifications" className={`relative ${link}`}>

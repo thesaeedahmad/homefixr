@@ -12,6 +12,7 @@ import { User } from '@prisma/client';
 import { userRepository } from '../repositories/user.repository';
 import { hashPassword, verifyPassword } from '../lib/password';
 import { signToken } from '../lib/jwt';
+import { fraudService } from './fraud.service';
 import { AppError } from '../lib/errors';
 import { RegisterInput, LoginInput } from '../schemas/auth.schema';
 
@@ -34,6 +35,9 @@ export const authService = {
       passwordHash,
       role: input.role,
     });
+
+    // Rule-based fraud screen for possible duplicate accounts (non-blocking).
+    await fraudService.checkRegistration(user.id, user.name);
 
     const token = signToken({ sub: user.id, role: user.role });
     return { token, user: toPublicUser(user) };

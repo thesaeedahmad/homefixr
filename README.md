@@ -25,8 +25,9 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] Iteration 7 — Chat (Socket.io) (real-time 1-to-1 messaging on a job)
 - [x] Iteration 8 — Escrow Payment Simulation (Held → Released / Refunded state machine)
 - [x] Iteration 9 — Reviews & Ratings (post-completion rating, aggregate trust signal)
-- [x] **Iteration 10 — Notifications** (in-app feed + nav bar unread badge)
-- [ ] Iteration 11 — Admin Dashboard & Fraud Detection
+- [x] Iteration 10 — Notifications (in-app feed + nav bar unread badge)
+- [x] **Iteration 11 — Admin Dashboard & Fraud Detection** (overview, users/jobs, rule-based fraud flags)
+- [ ] Iteration 12 — Dashboards polish + HCI evaluation
 
 ## Architecture (frozen)
 

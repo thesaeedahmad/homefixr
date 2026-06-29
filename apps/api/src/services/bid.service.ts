@@ -10,6 +10,7 @@
 import { jobRepository } from '../repositories/job.repository';
 import { bidRepository } from '../repositories/bid.repository';
 import { notificationService } from './notification.service';
+import { fraudService } from './fraud.service';
 import { AppError } from '../lib/errors';
 import { CreateBidInput } from '../schemas/bid.schema';
 
@@ -41,6 +42,11 @@ export const bidService = {
       'BID_RECEIVED',
       `New bid on "${job.title}"`,
       jobId,
+    );
+    // Rule-based fraud screen (records a flag for admin review if suspicious).
+    await fraudService.checkBid(
+      { id: bid.id, hourlyRate: bid.hourlyRate, totalAmount: bid.totalAmount },
+      { budgetHint: job.budgetHint },
     );
     return bid;
   },

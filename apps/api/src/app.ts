@@ -29,6 +29,7 @@ import messageRoutes from './routes/message.routes';
 import paymentRoutes from './routes/payment.routes';
 import reviewRoutes from './routes/review.routes';
 import notificationRoutes from './routes/notification.routes';
+import adminRoutes from './routes/admin.routes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 
 export function createApp(): Application {
@@ -49,6 +50,7 @@ export function createApp(): Application {
   app.use('/api', paymentRoutes);
   app.use('/api', reviewRoutes);
   app.use('/api', notificationRoutes);
+  app.use('/api/admin', adminRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

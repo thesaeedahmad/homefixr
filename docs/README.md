@@ -28,6 +28,7 @@ final report's six chapters.
 - [Iteration 8 — Escrow Payment Simulation](04-testing/iteration-8-escrow.md) — state machine test report
 - [Iteration 9 — Reviews & Ratings](04-testing/iteration-9-reviews.md) — review + aggregate test report
 - [Iteration 10 — Notifications](04-testing/iteration-10-notifications.md) — events + gating test report
+- [Iteration 11 — Admin Dashboard & Fraud Detection](04-testing/iteration-11-admin-fraud.md) — admin + fraud test report
 - *(Per module)* Test plan, test cases, expected vs. actual results, usability & HCI evaluation
 
 ## 05 — Report
