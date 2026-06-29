@@ -102,6 +102,35 @@ Updates the profile, stamps the documents, and syncs the provider's `isVerified`
 
 ---
 
+## Jobs (Iteration 4) — all require `Authorization: Bearer <jwt>`
+
+Categories (fixed): `PLUMBING, ELECTRICAL, APPLIANCES, HANDYMAN, CLEANING`.
+Job status: `OPEN → IN_PROGRESS → COMPLETED → CLOSED`.
+
+### POST /api/jobs — *Customer only*
+Post a job (multipart, so photos can be attached).
+**Fields:** `category`, `title` (≥3), `description` (≥10), `location`, `budgetHint` (optional number), `photos` (0–5 images, ≤5 MB each).
+**201 Created** → `{ job }`. **Errors:** `400` validation · `401` · `403` not a customer.
+
+### GET /api/jobs
+Browse **OPEN** jobs. **Query (optional):** `category`, `location` (case-insensitive contains).
+**200 OK** → `{ jobs: [ ... ] }` (newest first).
+
+### GET /api/jobs/mine — *Customer only*
+**200 OK** → `{ jobs }` — the caller's own jobs (any status).
+
+### GET /api/jobs/:id
+**200 OK** → `{ job }` (includes `customer`). **404** if not found.
+
+### PATCH /api/jobs/:id — *Customer only (owner)*
+Edit an OPEN job. **Body (≥1):** `title`, `description`, `location`, `budgetHint`.
+**200 OK** → `{ job }`. **Errors:** `400` · `403` not owner · `404` · `409` not OPEN.
+
+### PATCH /api/jobs/:id/cancel — *Customer only (owner)*
+Cancels an OPEN job (→ CLOSED). **200 OK** → `{ job }`. **Errors:** `403` · `404` · `409` not OPEN.
+
+---
+
 ## Health
 ### GET /api/health
 Liveness probe. **200 OK** → `{ "status": "ok", "service": "homefixr-api", "timestamp": "..." }`

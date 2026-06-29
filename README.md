@@ -18,8 +18,9 @@ Design phase complete; implementation underway (Scrum, one module per iteration)
 - [x] Iteration 1 — Authentication & RBAC (register/login, JWT, bcrypt, RBAC)
 - [x] Live Supabase PostgreSQL connected + initial migration
 - [x] Iteration 2 — User Profiles & Settings (view/edit profile, change password)
-- [x] **Iteration 3 — Identity Verification** (Cloudinary doc upload, admin approval queue, trust badge, avatars)
-- [ ] Iteration 4 — Job Posting & Categories
+- [x] Iteration 3 — Identity Verification (Cloudinary doc upload, admin approval queue, trust badge, avatars)
+- [x] **Iteration 4 — Job Posting & Categories** (post/edit/cancel jobs, photos, browse + filter)
+- [ ] Iteration 5 — Bidding / Offers
 
 ## Architecture (frozen)
 
