@@ -12,7 +12,14 @@ dotenv.config();
 export const env = {
   port: Number(process.env.PORT) || 4000,
   nodeEnv: process.env.NODE_ENV ?? 'development',
-  webOrigin: process.env.WEB_ORIGIN ?? 'http://localhost:3000',
+  // Allowed browser origins for CORS / Socket.io. Supports a comma-separated
+  // list (e.g. local dev + deployed Vercel URL) and tolerates a trailing slash
+  // in each value, since a mismatched origin causes the browser's "Failed to
+  // fetch" / CORS errors.
+  webOrigins: (process.env.WEB_ORIGIN ?? 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
 
   // Authentication (Iteration 1). The fallback secret is for LOCAL DEV ONLY —
   // production must set a strong JWT_SECRET in the environment.

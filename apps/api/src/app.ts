@@ -36,7 +36,7 @@ export function createApp(): Application {
   const app = express();
 
   app.use(helmet());
-  app.use(cors({ origin: env.webOrigin }));
+  app.use(cors({ origin: env.webOrigins }));
   app.use(express.json());
 
   app.use('/api/health', healthRoutes);

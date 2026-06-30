@@ -16,7 +16,7 @@ import { assertParticipant } from '../services/chat.service';
 let io: Server | null = null;
 
 export function initSocket(httpServer: HttpServer): Server {
-  io = new Server(httpServer, { cors: { origin: env.webOrigin } });
+  io = new Server(httpServer, { cors: { origin: env.webOrigins } });
 
   // Authenticate every socket connection using the JWT from the handshake.
   io.use((socket, next) => {
